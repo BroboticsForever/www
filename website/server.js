@@ -1,8 +1,9 @@
-var cluster = require('cluster');
-var env = process.env.NODE_ENV || 'development';
+'use strict';
 
-if ((cluster.isMaster) && process.argv.indexOf('--single-process') < 0 && env != 'development') {
-    console.log("Forking processes for each CPU...");
+var cluster = require('cluster');
+
+if ((cluster.isMaster) && process.argv.indexOf('--multi-process') > 0) {
+    console.log('Forking processes for each CPU...');
 
     var numCPUs = require('os').cpus().length;
 
@@ -40,5 +41,5 @@ if ((cluster.isMaster) && process.argv.indexOf('--single-process') < 0 && env !=
 
     console.log('Worker ' + workerId + ' listening on port ' + port);
 
-    exports = module.exports = app;
+    module.exports = app;
 }
