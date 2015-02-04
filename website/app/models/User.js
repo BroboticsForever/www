@@ -1,3 +1,5 @@
+'use strict';
+
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema,
 	crypto = require('crypto');
@@ -99,7 +101,10 @@ UserSchema.methods = {
 	 * @api public
 	 */
 	hashPassword: function(password) {
-		if (!password || !this.salt) return '';
+		if (!password || !this.salt) {
+            return '';
+        }
+
 		var salt = new Buffer(this.salt, 'base64');
 		return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
 	}

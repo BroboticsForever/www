@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('MainCtrl', []).controller('MainController', function($scope) {
 
 	$scope.tagline = 'An organization of brothers forever realizing the most innovative aspects of modern robotic technology.';
