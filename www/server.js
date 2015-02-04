@@ -1,53 +1,44 @@
-'use strict';
-
-/*
-var cl = console.log;
-console.log = function(){
-  console.trace();
-  cl.apply(console,arguments);
-};
-*/
-
-// Requires meanio .
-var mean = require('meanio');
 var cluster = require('cluster');
+var env = process.env.NODE_ENV || 'development';
 
+if ((cluster.isMaster) && process.argv.indexOf('--single-process') < 0 && env != 'development') {
+    console.log("Forking processes for each CPU...");
 
-// Code to run if we're in the master process or if we are not in debug mode/ running tests
+    var numCPUs = require('os').cpus().length;
 
-if ((cluster.isMaster) && (process.execArgv.indexOf('--debug') < 0) && (process.env.NODE_ENV!=='test') && (process.execArgv.indexOf('--singleProcess')<0)) {
-//if (cluster.isMaster) {
-
-    console.log('for real!');
-    // Count the machine's CPUs
-    var cpuCount = require('os').cpus().length;
-
-    // Create a worker for each CPU
-    for (var i = 0; i < cpuCount; i += 1) {
-        console.log ('forking ',i);
+    for (var i = 0; i < numCPUs; i++) {
+        console.log('Forking worker ' + i);
         cluster.fork();
     }
 
-    // Listen for dying workers
-    cluster.on('exit', function (worker) {
-        // Replace the dead worker, we're not sentimental
-        console.log('Worker ' + worker.id + ' died :(');
+    cluster.on('exit', function(worker) {
+        console.log('Worker ' + worker.id + ' has died. Forking new worker.');
         cluster.fork();
-
     });
-
-// Code to run if we're in a worker process
 } else {
-
     var workerId = 0;
-    if (!cluster.isMaster)
-    {
+    var express = require('express');
+    var app = express();
+    var bodyParser = require('body-parser');
+    var methodOverride = require('method-override');
+    var port = process.env.PORT || 3000;
+
+    if (!cluster.isMaster) {
         workerId = cluster.worker.id;
     }
-// Creates and serves mean application
-    mean.serve({ workerid: workerId /* more options placeholder*/ }, function (app) {
-      var config = app.config.clean;
-        var port = config.https && config.https.port ? config.https.port : config.http.port;
-        console.log('Mean app started on port ' + port + ' (' + process.env.NODE_ENV + ') cluster.worker.id:', workerId);
-    });
+
+    app.use(bodyParser.json());
+    app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
+    app.use(bodyParser.urlencoded({ extended: true }));
+
+    app.use(methodOverride('X-HTTP-Method-Override'));
+    app.use(express.static(__dirname + '/public'));
+
+    require('./app/routes')(app);
+
+    app.listen(port);
+
+    console.log('Worker ' + workerId + ' listening on port ' + port);
+
+    exports = module.exports = app;
 }
