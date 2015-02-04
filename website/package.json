@@ -1,5 +1,6 @@
 {
-  "name": "practice",
+  "name": "www",
+  "repository": "https://github.com/BroboticsForever/www",
   "main": "server.js",
   "dependencies": {
     "express" : "~4.5.1",
