@@ -3,11 +3,13 @@
 var cluster = require('cluster');
 
 if ((cluster.isMaster) && process.argv.indexOf('--multi-process') > 0) {
+
+    console.log('Worker 0 is the parent process.');
     console.log('Forking processes for each CPU...');
 
     var numCPUs = require('os').cpus().length;
 
-    for (var i = 0; i < numCPUs; i++) {
+    for (var i = 1; i <= numCPUs; i++) {
         console.log('Forking worker ' + i);
         cluster.fork();
     }

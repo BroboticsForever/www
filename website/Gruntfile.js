@@ -7,9 +7,13 @@ var env = process.env.NODE_ENV || 'development',
 if (env === 'development') {
     args = [];
     nodeArgs = ['--debug'];
-} else {
+} else if (env === 'production' || env === 'test') {
     args = ['--multi-process'];
     nodeArgs = [];
+} else {
+    console.log('\nIncorrect value for environment variable NODE_ENV');
+    console.log('Appropriate values are "development", "production", or "test".\n');
+    process.exit(0);
 }
 
 module.exports = function(grunt) {
