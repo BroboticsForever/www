@@ -48,8 +48,6 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['jshint', 'nodemon']);
 
     grunt.registerTask('available_tasks', 'List all available tasks', function(sorted) {
-        var done = this.async(), availableTasks = [];
-
         sorted = (sorted !== 'false');
 
         for (var task in grunt.task._tasks) {
@@ -70,8 +68,23 @@ module.exports = function(grunt) {
         availableTasks.forEach(function(task) {
             console.log(task);
         });
-
-        done();
     });
 
+    grunt.registerTask('create_help', 'Creates a help entry for the specified grunt task.', function (task) {
+        for (var t in grunt.task._tasks) {
+            if (t === task) {
+                console.log('Creating help entry for task "' + task + '"...');
+
+                var fs = require('fs');
+                var help = JSON.parse(fs.readFileSync('help/tasks.json', 'utf8'));
+
+                console.log(help);
+
+                return true;
+            }
+        }
+
+        console.log('\nNo grunt task found with the name "' + task + '". Please try again.\n');
+        return false;
+    });
 };
