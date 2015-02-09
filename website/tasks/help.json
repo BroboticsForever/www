@@ -1,0 +1,33 @@
+[
+  {
+    "available_tasks": {
+      "description": "List all available grunt tasks",
+      "arguments": {
+        "sorted": "Set to 'false' if you desire an unsorted list. Set to 'true' or no entry for a sorted list."
+      }
+    }
+  },
+  {
+    "create_help": {
+      "description": "Creates a help entry for the specified grunt task.",
+      "arguments": {
+        "task": "The task you wish to create a help entry for."
+      }
+    }
+  },
+  {
+    "default": {
+      "description": "Alias for 'jshint' and 'nodemon' tasks."
+    }
+  },
+  {
+    "jshint": {
+      "description": "Validate files with JSHint."
+    }
+  },
+  {
+    "nodemon": {
+      "description": "Runs a nodemon monitor of your node.js server."
+    }
+  }
+]

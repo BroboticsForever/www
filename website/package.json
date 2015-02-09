@@ -1,16 +1,16 @@
 {
   "name": "www",
-  "repository": "https://github.com/BroboticsForever/www",
+  "repository": "https://github.com/BroboticsForever/www.git",
   "main": "server.js",
   "dependencies": {
-    "body-parser": "~1.4.2",
-    "express": "~4.5.1",
-    "grunt-nodemon": "^0.4.0",
-    "method-override": "~2.0.2",
-    "mongoose": "~3.8.0"
-  },
-  "devDependencies": {
+    "body-parser": "^1.4.2",
+    "express": "^4.5.1",
     "grunt": "^0.4.5",
-    "grunt-contrib-jshint": "^0.11.0"
+    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-nodemon": "^0.4.0",
+    "jsonfile": "^2.0.0",
+    "method-override": "^2.0.2",
+    "mongoose": "^3.8.0",
+    "prompt": "^0.2.14"
   }
 }
