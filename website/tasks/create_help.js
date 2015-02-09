@@ -18,7 +18,7 @@ module.exports = function(grunt, task, done) {
         return done(false);
     }
 
-    var help = require('./help');
+    var help = require('./help.json');
 
     for (var i = 0; i < help.length; i++) {
         if (help[i][task]) {
@@ -57,7 +57,7 @@ module.exports = function(grunt, task, done) {
                 console.log('\nCreating help entry for task "' + task + '"...\n');
 
                 help.push(createJSON(task, createJSON('description', _task.info)));
-                var answers = JSON.stringify(answers).replace(/\\" -> /g, '');
+                answers = JSON.stringify(answers).replace(/\\" -> /g, '');
                 help[help.length-1][task].arguments = JSON.parse(answers);
 
                 jf.writeFile('./tasks/help.json', help, function(error) {

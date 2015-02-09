@@ -3,8 +3,13 @@
     "available_tasks": {
       "description": "List all available grunt tasks",
       "arguments": {
-        "sorted": "Set to 'false' if you desire an unsorted list. Set to 'true' or no entry for a sorted list."
-      }
+        "sorted": "Set to 'true' or no entry for a sorted list. Set to 'false' if you desire an unsorted list."
+      },
+      "examples": [
+        "grunt available_tasks",
+        "grunt available_tasks:true",
+        "grunt available_tasks:false"
+      ]
     }
   },
   {
@@ -12,22 +17,49 @@
       "description": "Creates a help entry for the specified grunt task.",
       "arguments": {
         "task": "The task you wish to create a help entry for."
-      }
+      },
+      "examples": [
+        "grunt create_help:available_tasks",
+        "grunt create_help:jshint",
+        "grunt create_help:my_example_task"
+      ]
     }
   },
   {
     "default": {
-      "description": "Alias for 'jshint' and 'nodemon' tasks."
+      "description": "Alias for 'jshint' and 'nodemon' tasks.",
+      "examples": [
+        "grunt default"
+      ]
     }
   },
   {
     "jshint": {
-      "description": "Validate files with JSHint."
+      "description": "Validate files with JSHint.",
+      "examples": [
+        "grunt jshint"
+      ]
     }
   },
   {
     "nodemon": {
-      "description": "Runs a nodemon monitor of your node.js server."
+      "description": "Runs a nodemon monitor of your node.js server.",
+      "examples": [
+        "grunt nodemon"
+      ]
+    }
+  },
+  {
+    "help": {
+      "description": "View the help entry for the specified grunt task.",
+      "arguments": {
+        "task": "The task you wish to view the help entry for."
+      },
+      "examples": [
+        "grunt help:available_tasks",
+        "grunt help:default",
+        "grunt help:help"
+      ]
     }
   }
 ]
