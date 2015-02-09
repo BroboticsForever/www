@@ -1,14 +1,14 @@
 'use strict';
 
 var env = process.env.NODE_ENV || 'development',
-    args,
+    myArgs,
     nodeArgs;
 
 if (env === 'development') {
-    args = [];
+    myArgs = [];
     nodeArgs = ['--debug'];
 } else if (env === 'production' || env === 'test') {
-    args = ['--multi-process'];
+    myArgs = ['--multi-process'];
     nodeArgs = [];
 } else {
     console.log('\nIncorrect value for environment variable NODE_ENV');
@@ -31,7 +31,7 @@ module.exports = function(grunt) {
             dev: {
                 script: 'server.js',
                 options: {
-                    args: args,
+                    args: myArgs,
                     ignore: ['node_modules/**'],
                     ext: 'js,html',
                     nodeArgs: nodeArgs,
@@ -45,33 +45,18 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-nodemon');
 
-    grunt.registerTask('default', ['jshint', 'nodemon']);
+    grunt.registerTask('default', 'Alias for \'jshint\' and \'nodemon\' tasks.' , ['jshint', 'nodemon']);
 
-    grunt.registerTask('available_tasks', 'List all available tasks', function(sorted) {
-        var done = this.async(), availableTasks = [];
-
-        sorted = (sorted !== 'false');
-
-        for (var task in grunt.task._tasks) {
-            availableTasks.push(task);
-        }
-
-        if (sorted) {
-            availableTasks.sort(function (a, b) {
-                var textA = a.toUpperCase(),
-                    textB = b.toUpperCase();
-
-                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-            });
-        }
-
-        console.log('\nThe following ' + availableTasks.length + ' tasks are available for use:\n');
-
-        availableTasks.forEach(function(task) {
-            console.log(task);
-        });
-
-        done();
+    grunt.registerTask('available_tasks', 'List all available grunt tasks', function(sorted) {
+        return require('./tasks/available_tasks')(grunt, sorted);
     });
 
+    grunt.registerTask('create_help', 'Creates a help entry for the specified grunt task.', function (task) {
+        var done = this.async();
+        return require('./tasks/create_help')(grunt, task, done);
+    });
+
+    grunt.registerTask('help', 'View the help entry for the specified grunt task.', function(task) {
+        return require('./tasks/help.js')(task);
+    });
 };
