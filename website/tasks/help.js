@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function(task) {
     if (!task) {
         console.log('Please input a task to recieve help info for.\n'.red);

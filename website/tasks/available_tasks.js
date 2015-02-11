@@ -1,10 +1,14 @@
+'use strict';
+
 module.exports = function(grunt, sorted) {
     var availableTasks = [];
 
     sorted = (sorted !== 'false' && sorted !== 'f');
 
     for (var task in grunt.task._tasks) {
-        availableTasks.push(task);
+        if (grunt.task._tasks.hasOwnProperty(task)) {
+            availableTasks.push(task);
+        }
     }
 
     if (sorted) {

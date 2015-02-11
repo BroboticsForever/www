@@ -21,7 +21,7 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         jshint: {
             all: {
-                src: ['Gruntfile.js', 'server.js', 'app/**/*.js', 'config/*.js', 'public/js/**/*.js'],
+                src: ['Gruntfile.js', 'server.js', 'app/**/*.js', 'config/*.js', 'public/js/**/*.js', 'tasks/*.js'],
                 options: {
                     jshintrc: true
                 }
@@ -58,5 +58,10 @@ module.exports = function(grunt) {
 
     grunt.registerTask('help', 'View the help entry for the specified grunt task.', function(task) {
         return require('./tasks/help.js')(task);
+    });
+
+    grunt.registerTask('create_page', 'Createa a new page with the specified title.', function(title) {
+        var done = this.async();
+        return require('./tasks/create_page')(title, done);
     });
 };
