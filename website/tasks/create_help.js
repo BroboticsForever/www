@@ -1,3 +1,5 @@
+'use strict';
+
 function createJSON(key, value) {
     return JSON.parse('{'+ JSON.stringify(key) + ':' + JSON.stringify(value) + '}');
 }
