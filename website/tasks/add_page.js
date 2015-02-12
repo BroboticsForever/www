@@ -70,11 +70,11 @@ function readAppRoutesFile(title, done, callback) {
             return done(false);
         }
 
-        callback(title, routes, done);
+        callback(title, routes, done, readTemplateServiceFile);
     });
 }
 
-function writeAppRoutesFile(title, routes, done) {
+function writeAppRoutesFile(title, routes, done, callback) {
 
     routes = routes.toString().replace('.otherwise', '.when(\'/' + changeCase.paramCase(title) + '\', {\n\t\t\ttemplateURL: \'views/' + changeCase.snakeCase(title) + '.html\',\n\t\t\tcontroller: \'' + changeCase.pascalCase(title) + 'Controller\'\n\t\t})\n\n\t\t.otherwise');
 
@@ -85,6 +85,64 @@ function writeAppRoutesFile(title, routes, done) {
         }
 
         console.log('public/js/appRoutes.js was written successfully.');
+
+        callback(title, done, writeServiceFile);
+    });
+}
+
+function readTemplateServiceFile(title, done, callback) {
+    fs.readFile('public/js/services/template.js', function(err, template) {
+        if (err) {
+            console.log(err.toString().red + '\n');
+            return done(false);
+        }
+
+        callback(title, template, done, readTemplateCtrlFile);
+    });
+}
+
+function writeServiceFile(title, service, done, callback) {
+    var pascalTitle = changeCase.pascalCase(title),
+        serviceFile = 'public/js/services/' + pascalTitle + 'Service.js';
+
+    service = service.toString().replace(/template/g, pascalTitle);
+
+    fs.writeFile(serviceFile, service, function(err) {
+        if (err) {
+            console.log(err.toString().red + '\n');
+            return done(false);
+        }
+
+        console.log(serviceFile + ' was written successfully.');
+
+        callback(title, done, writeCtrlFile);
+    });
+}
+
+function readTemplateCtrlFile(title, done, callback) {
+    fs.readFile('public/js/controllers/template.js', function(err, template) {
+        if (err) {
+            console.log(err.toString().red + '\n');
+            return done(false);
+        }
+
+        callback(title, template, done);
+    });
+}
+
+function writeCtrlFile(title, controller, done) {
+    var pascalTitle = changeCase.pascalCase(title),
+        controllerFile = 'public/js/controllers/' + pascalTitle + 'Ctrl.js';
+
+    controller = controller.toString().replace(/template/g, pascalTitle);
+
+    fs.writeFile(controllerFile, controller, function(err) {
+        if (err) {
+            console.log(err.toString().red + '\n');
+            return done(false);
+        }
+
+        console.log(controllerFile + ' was written successfully.');
 
         return done(true);
     });
