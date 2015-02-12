@@ -29,7 +29,7 @@ function writeHTMLFile(title, template, done, callback) {
             return done(false);
         }
 
-        console.log('\npublic/views/' + snakeTitle + '.html was written successfully.\n');
+        console.log('public/views/' + snakeTitle + '.html was written successfully.');
 
         callback(title, done, writeAppFile);
     });
@@ -42,11 +42,11 @@ function readAppFile(title, done, callback) {
             return done(false);
         }
 
-        callback(title, app, done);
+        callback(title, app, done, readAppRoutesFile);
     });
 }
 
-function writeAppFile(title, app, done) {
+function writeAppFile(title, app, done, callback) {
     var pascalTitle = changeCase.pascalCase(title);
 
     app = app.toString().replace(']);', ', \'' + pascalTitle + 'Ctrl\', \'' + pascalTitle + 'Service\']);');
@@ -58,6 +58,34 @@ function writeAppFile(title, app, done) {
         }
 
         console.log('public/js/app.js was written successfully.');
+
+        callback(title, done, writeAppRoutesFile);
+    });
+}
+
+function readAppRoutesFile(title, done, callback) {
+    fs.readFile('public/js/appRoutes.js', function(err, routes) {
+        if (err) {
+            console.log(err.toString().red + '\n');
+            return done(false);
+        }
+
+        callback(title, routes, done);
+    });
+}
+
+function writeAppRoutesFile(title, routes, done) {
+
+    routes = routes.toString().replace('.otherwise', '.when(\'/' + changeCase.paramCase(title) + '\', {\n\t\t\ttemplateURL: \'views/' + changeCase.snakeCase(title) + '.html\',\n\t\t\tcontroller: \'' + changeCase.pascalCase(title) + 'Controller\'\n\t\t})\n\n\t\t.otherwise');
+
+    fs.writeFile('public/js/appRoutes.js', routes, function(err) {
+        if (err) {
+            console.log(err.toString().red + '\n');
+            return done(false);
+        }
+
+        console.log('public/js/appRoutes.js was written successfully.');
+
         return done(true);
     });
 }
@@ -68,5 +96,7 @@ module.exports = function(title, done) {
         return done(false);
     }
 
-    createNewPage(title, done);
+    console.log('\nAttempting to create a new page...\n');
+
+    return createNewPage(title, done);
 };

@@ -4,7 +4,6 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 
 	$routeProvider
 
-		// home page
 		.when('/', {
 			templateUrl: 'views/home.html',
 			controller: 'MainController'
@@ -20,9 +19,9 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 			controller: 'AboutController'
 		})
 
-		.otherwise({
-		    templateUrl: 'views/notfound.html',
-			controller: 'NotFoundController'
+        .otherwise({
+            templateUrl: 'views/notfound.html',
+            controller: 'NotFoundController'
         });
 
 	$locationProvider.html5Mode(true);
