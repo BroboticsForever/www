@@ -34,14 +34,14 @@ module.exports = function(task) {
                     var title = '\n    Example';
 
                     if (t.examples.length === 1) {
-                        console.log(title + delimiter + '"' + t.examples[0] + '"');
+                        console.log(title + delimiter + t.examples[0]);
                     } else {
                         title = title + 's';
 
                         console.log(title + delimiter + '\n');
 
                         for (var k = 0; k < t.examples.length; k++) {
-                            console.log('\t"' + t.examples[k] + '"');
+                            console.log('\t' + t.examples[k]);
                         }
                     }
                 }
@@ -51,7 +51,7 @@ module.exports = function(task) {
         }
     }
 
-    console.log(('A help entry does not exist for grunt task "' + task.bold + '". This is likely because the task does not exist.\n').red);
+    console.log(('A help entry does not exist for grunt task "' + task.bold + '". This is likely because the task does not exist or a help entry has not yet been created.\n').red);
 
     return false;
 };
