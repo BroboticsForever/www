@@ -60,8 +60,8 @@ module.exports = function(grunt) {
         return require('./tasks/help.js')(task);
     });
 
-    grunt.registerTask('create_page', 'Createa a new page with the specified title.', function(title) {
+    grunt.registerTask('add_page', 'Add a page with the specified title to the website.', function(title) {
         var done = this.async();
-        return require('./tasks/create_page')(title, done);
+        return require('./tasks/add_page')(title, done);
     });
 };
