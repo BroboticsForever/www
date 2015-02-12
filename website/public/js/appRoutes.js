@@ -19,7 +19,7 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 			controller: 'AboutController'
 		})
 
-        .otherwise({
+		.otherwise({
             templateUrl: 'views/notfound.html',
             controller: 'NotFoundController'
         });

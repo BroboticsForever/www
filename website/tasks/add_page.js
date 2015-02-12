@@ -7,18 +7,18 @@ function createNewPage(title, done) {
     readTemplateHTMLFile(title, done, writeHTMLFile);
 }
 
-function readTemplateHTMLFile(title, done, callback) {
+function readTemplateHTMLFile(title, done) {
     fs.readFile('public/views/template.html', function(err, template) {
         if (err) {
             console.log(err.toString().red + '\n');
             return done(false);
         }
 
-        callback(title, template, done, readAppFile);
+        writeHTMLFile(title, template, done);
     });
 }
 
-function writeHTMLFile(title, template, done, callback) {
+function writeHTMLFile(title, template, done) {
     template = template.toString().replace('template', title);
 
     var snakeTitle = changeCase.snakeCase(title);
@@ -31,22 +31,22 @@ function writeHTMLFile(title, template, done, callback) {
 
         console.log('public/views/' + snakeTitle + '.html was written successfully.');
 
-        callback(title, done, writeAppFile);
+        readAppFile(title, done);
     });
 }
 
-function readAppFile(title, done, callback) {
+function readAppFile(title, done) {
     fs.readFile('public/js/app.js', function(err, app) {
         if (err) {
             console.log(err.toString().red + '\n');
             return done(false);
         }
 
-        callback(title, app, done, readAppRoutesFile);
+        writeAppFile(title, app, done);
     });
 }
 
-function writeAppFile(title, app, done, callback) {
+function writeAppFile(title, app, done) {
     var pascalTitle = changeCase.pascalCase(title);
 
     app = app.toString().replace(']);', ', \'' + pascalTitle + 'Ctrl\', \'' + pascalTitle + 'Service\']);');
@@ -59,24 +59,24 @@ function writeAppFile(title, app, done, callback) {
 
         console.log('public/js/app.js was written successfully.');
 
-        callback(title, done, writeAppRoutesFile);
+        readAppRoutesFile(title, done);
     });
 }
 
-function readAppRoutesFile(title, done, callback) {
+function readAppRoutesFile(title, done) {
     fs.readFile('public/js/appRoutes.js', function(err, routes) {
         if (err) {
             console.log(err.toString().red + '\n');
             return done(false);
         }
 
-        callback(title, routes, done, readTemplateServiceFile);
+        writeAppRoutesFile(title, routes, done);
     });
 }
 
-function writeAppRoutesFile(title, routes, done, callback) {
+function writeAppRoutesFile(title, routes, done) {
 
-    routes = routes.toString().replace('.otherwise', '.when(\'/' + changeCase.paramCase(title) + '\', {\n\t\t\ttemplateURL: \'views/' + changeCase.snakeCase(title) + '.html\',\n\t\t\tcontroller: \'' + changeCase.pascalCase(title) + 'Controller\'\n\t\t})\n\n\t\t.otherwise');
+    routes = routes.toString().replace('.otherwise', '.when(\'/' + changeCase.paramCase(title) + '\', {\n\t\t\ttemplateUrl: \'views/' + changeCase.snakeCase(title) + '.html\',\n\t\t\tcontroller: \'' + changeCase.pascalCase(title) + 'Controller\'\n\t\t})\n\n\t\t.otherwise');
 
     fs.writeFile('public/js/appRoutes.js', routes, function(err) {
         if (err) {
@@ -86,22 +86,22 @@ function writeAppRoutesFile(title, routes, done, callback) {
 
         console.log('public/js/appRoutes.js was written successfully.');
 
-        callback(title, done, writeServiceFile);
+        readTemplateServiceFile(title, done);
     });
 }
 
-function readTemplateServiceFile(title, done, callback) {
+function readTemplateServiceFile(title, done) {
     fs.readFile('public/js/services/template.js', function(err, template) {
         if (err) {
             console.log(err.toString().red + '\n');
             return done(false);
         }
 
-        callback(title, template, done, readTemplateCtrlFile);
+        writeServiceFile(title, template, done);
     });
 }
 
-function writeServiceFile(title, service, done, callback) {
+function writeServiceFile(title, service, done) {
     var pascalTitle = changeCase.pascalCase(title),
         serviceFile = 'public/js/services/' + pascalTitle + 'Service.js';
 
@@ -115,18 +115,18 @@ function writeServiceFile(title, service, done, callback) {
 
         console.log(serviceFile + ' was written successfully.');
 
-        callback(title, done, writeCtrlFile);
+        readTemplateCtrlFile(title, done);
     });
 }
 
-function readTemplateCtrlFile(title, done, callback) {
+function readTemplateCtrlFile(title, done) {
     fs.readFile('public/js/controllers/template.js', function(err, template) {
         if (err) {
             console.log(err.toString().red + '\n');
             return done(false);
         }
 
-        callback(title, template, done);
+        writeCtrlFile(title, template, done);
     });
 }
 
@@ -143,6 +143,36 @@ function writeCtrlFile(title, controller, done) {
         }
 
         console.log(controllerFile + ' was written successfully.');
+
+        readIndexHTMLFile(title, done);
+    });
+}
+
+function readIndexHTMLFile(title, done) {
+    fs.readFile('public/index.html', function(err, indexHTML) {
+        if (err) {
+            console.log(err.toString().red + '\n');
+            return done(false);
+        }
+
+        writeIndexHTMLFile(title, indexHTML, done);
+    });
+}
+
+function writeIndexHTMLFile(title, indexHTML, done) {
+    var pascalTitle = changeCase.pascalCase(title),
+        paramTitle = changeCase.paramCase(title);
+
+    indexHTML = indexHTML.toString().replace('<script src="js/appRoutes.js"></script>', '<script src="js/controllers/' + pascalTitle + 'Ctrl.js"></script>\n\t<script src="js/services/' + pascalTitle + 'Service.js"></script>\n\t<script src="js/appRoutes.js"></script>');
+    indexHTML = indexHTML.replace('<!-- link marker -->', '<li><a href="/' + paramTitle + '">' + title + '</a></li>\n\t\t\t<!-- link marker -->');
+
+    fs.writeFile('public/index.html', indexHTML, function(err) {
+        if (err) {
+            console.log(err.toString().red + '\n');
+            return done(false);
+        }
+
+        console.log('index.html was written successfully.');
 
         return done(true);
     });
