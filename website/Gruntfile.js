@@ -64,4 +64,9 @@ module.exports = function(grunt) {
         var done = this.async();
         return require('./tasks/add_page')(title, done);
     });
+
+    grunt.registerTask('delete_page', 'Delete the page with the specified title from the website. USE WITH CAUTION!', function(title) {
+        var done = this.async();
+        return require('./tasks/delete_page')(title, done);
+    });
 };

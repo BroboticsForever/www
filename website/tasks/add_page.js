@@ -3,14 +3,21 @@
 var fs = require('fs'),
     changeCase = require('change-case');
 
+function checkErr(err) {
+    if (err) {
+        console.log(err.toString().red + '\n');
+        return true;
+    }
+    return false;
+}
+
 function createNewPage(title, done) {
     readTemplateHTMLFile(title, done, writeHTMLFile);
 }
 
 function readTemplateHTMLFile(title, done) {
     fs.readFile('public/views/template.html', function(err, template) {
-        if (err) {
-            console.log(err.toString().red + '\n');
+        if (checkErr(err)) {
             return done(false);
         }
 
@@ -24,8 +31,7 @@ function writeHTMLFile(title, template, done) {
     var snakeTitle = changeCase.snakeCase(title);
 
     fs.writeFile('public/views/' + snakeTitle + '.html', template, function(err) {
-        if (err) {
-            console.log(err.toString().red + '\n');
+        if (checkErr(err)) {
             return done(false);
         }
 
@@ -37,8 +43,7 @@ function writeHTMLFile(title, template, done) {
 
 function readAppFile(title, done) {
     fs.readFile('public/js/app.js', function(err, app) {
-        if (err) {
-            console.log(err.toString().red + '\n');
+        if (checkErr(err)) {
             return done(false);
         }
 
@@ -52,8 +57,7 @@ function writeAppFile(title, app, done) {
     app = app.toString().replace(']);', ', \'' + pascalTitle + 'Ctrl\', \'' + pascalTitle + 'Service\']);');
 
     fs.writeFile('public/js/app.js', app, function(err) {
-        if (err) {
-            console.log(err.toString().red + '\n');
+        if (checkErr(err)) {
             return done(false);
         }
 
@@ -65,8 +69,7 @@ function writeAppFile(title, app, done) {
 
 function readAppRoutesFile(title, done) {
     fs.readFile('public/js/appRoutes.js', function(err, routes) {
-        if (err) {
-            console.log(err.toString().red + '\n');
+        if (checkErr(err)) {
             return done(false);
         }
 
@@ -79,8 +82,7 @@ function writeAppRoutesFile(title, routes, done) {
     routes = routes.toString().replace('.otherwise', '.when(\'/' + changeCase.paramCase(title) + '\', {\n\t\t\ttemplateUrl: \'views/' + changeCase.snakeCase(title) + '.html\',\n\t\t\tcontroller: \'' + changeCase.pascalCase(title) + 'Controller\'\n\t\t})\n\n\t\t.otherwise');
 
     fs.writeFile('public/js/appRoutes.js', routes, function(err) {
-        if (err) {
-            console.log(err.toString().red + '\n');
+        if (checkErr(err)) {
             return done(false);
         }
 
@@ -92,8 +94,7 @@ function writeAppRoutesFile(title, routes, done) {
 
 function readTemplateServiceFile(title, done) {
     fs.readFile('public/js/services/template.js', function(err, template) {
-        if (err) {
-            console.log(err.toString().red + '\n');
+        if (checkErr(err)) {
             return done(false);
         }
 
@@ -108,8 +109,7 @@ function writeServiceFile(title, service, done) {
     service = service.toString().replace(/template/g, pascalTitle);
 
     fs.writeFile(serviceFile, service, function(err) {
-        if (err) {
-            console.log(err.toString().red + '\n');
+        if (checkErr(err)) {
             return done(false);
         }
 
@@ -121,8 +121,7 @@ function writeServiceFile(title, service, done) {
 
 function readTemplateCtrlFile(title, done) {
     fs.readFile('public/js/controllers/template.js', function(err, template) {
-        if (err) {
-            console.log(err.toString().red + '\n');
+        if (checkErr(err)) {
             return done(false);
         }
 
@@ -137,8 +136,7 @@ function writeCtrlFile(title, controller, done) {
     controller = controller.toString().replace(/template/g, pascalTitle);
 
     fs.writeFile(controllerFile, controller, function(err) {
-        if (err) {
-            console.log(err.toString().red + '\n');
+        if (checkErr(err)) {
             return done(false);
         }
 
@@ -150,8 +148,7 @@ function writeCtrlFile(title, controller, done) {
 
 function readIndexHTMLFile(title, done) {
     fs.readFile('public/index.html', function(err, indexHTML) {
-        if (err) {
-            console.log(err.toString().red + '\n');
+        if (checkErr(err)) {
             return done(false);
         }
 
@@ -167,8 +164,7 @@ function writeIndexHTMLFile(title, indexHTML, done) {
     indexHTML = indexHTML.replace('<!-- link marker -->', '<li><a href="/' + paramTitle + '">' + title + '</a></li>\n\t\t\t<!-- link marker -->');
 
     fs.writeFile('public/index.html', indexHTML, function(err) {
-        if (err) {
-            console.log(err.toString().red + '\n');
+        if (checkErr(err)) {
             return done(false);
         }
 
