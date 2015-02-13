@@ -72,5 +72,16 @@
         "grunt add_page:\"New Page Title\""
       ]
     }
+  },
+  {
+    "delete_page": {
+      "description": "Delete the page with the specified title from the website. USE WITH CAUTION!",
+      "arguments": {
+        "title": "The title of the page you wish to delete."
+      },
+      "examples": [
+        "grunt delete_page:\"My Page\""
+      ]
+    }
   }
 ]
