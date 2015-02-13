@@ -9,14 +9,14 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 			controller: 'MainController'
 		})
 
-		.when('/links', {
-			templateUrl: 'views/links.html',
-			controller: 'LinksController'
-		})
-
 		.when('/about', {
 			templateUrl: 'views/about.html',
 			controller: 'AboutController'
+		})
+
+		.when('/projects', {
+			templateUrl: 'views/projects.html',
+			controller: 'ProjectsController'
 		})
 
 		.otherwise({
