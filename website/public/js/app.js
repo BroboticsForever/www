@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('broboticsApp', ['ngRoute', 'appRoutes', 'MainCtrl', 'LinksCtrl', 'LinksService', 'AboutCtrl', 'AboutService', 'NotFoundCtrl', 'NotFoundService']);
+angular.module('broboticsApp', ['ngRoute', 'appRoutes', 'MainCtrl', 'AboutCtrl', 'AboutService', 'NotFoundCtrl', 'NotFoundService', 'ProjectsCtrl', 'ProjectsService']);
