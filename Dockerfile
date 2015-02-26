@@ -6,7 +6,25 @@ MAINTAINER Ian Tait <thetaiter@gmail.com>
 ENV HOME /root
 RUN mkdir -p /etc/my_init.d
 
+# INSTALL NODEJS
+RUN curl -sL https://deb.nodesource.com/setup | bash -
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install nodejs
 
+# INSTALL GIT
+RUN \
+  DEBIAN_FRONTEND=noninteractive apt-get -y install git && \
+  git config --global user.name "Ian Tait" && \
+  git config --global user.email "thetaiter@gmail.com"
+
+# INSTALL WWW
+COPY ./website /root/website
+COPY ./scripts/start_www.sh /etc/my_init.d/startup.sh
+RUN \
+  cd /root/website && \
+  npm install -g bower && \
+  npm install -g grunt-cli && \
+  npm install && \
+  bower install --allow-root
 
 #CLEANUP
 RUN apt-get -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
