@@ -2,7 +2,7 @@
 
 module.exports = function(task) {
     if (!task) {
-        console.log('Please input a task to recieve help info for.\n'.red);
+        console.log('Please input a task to receive help info for.\n'.red);
 
         return false;
     }
